@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@media (max-width: 1425px) {
+  .responsive-table thead {
+    display: none;
+  }
+
+  .responsive-table tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .responsive-table tbody tr td:first-child {
+    display: block;
+    width: 100%;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.5rem;
+    background: #f9fafb;
+  }
+
+  .responsive-table tbody tr td:not(:first-child) {
+    display: inline-block;
+    min-width: 70px;
+    padding: 0.5rem;
+    border: none;
+    border-right: 1px solid #e5e7eb;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .responsive-table tbody tr td:not(:first-child):last-child {
+    border-right: none;
+  }
+}
