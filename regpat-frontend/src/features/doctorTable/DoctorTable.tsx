@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import {
-  selectDoctorsTable,
-  selectDoctorsTableFetching,
-  selectTableOneAppointment,
-} from "./doctorTableSlice";
-import { fetchAppointmentOneDate, fetchDoctors } from "./doctorTableThunks";
+import { useState } from "react";
+// import { useAppDispatch, useAppSelector } from "../../app/hooks";
+// import {
+//   selectDoctorsTable,
+//   selectDoctorsTableFetching,
+//   selectTableOneAppointment,
+// } from "./doctorTableSlice";
+// import { fetchAppointmentOneDate, fetchDoctors } from "./doctorTableThunks";
 import DoctorTableItem from "./components/DoctorTableItem";
 import { FaCalendarAlt } from "react-icons/fa";
 import dayjs from "dayjs";
@@ -13,22 +13,23 @@ import { FaChevronRight } from "react-icons/fa";
 import { FaChevronLeft } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 import { HiOutlineBars3BottomRight } from "react-icons/hi2";
+import {doctorsMock} from "../../types";
 
 const DoctorTable = () => {
-  const dispatch = useAppDispatch();
-  const doctorsTable = useAppSelector(selectDoctorsTable);
-  const isFetching = useAppSelector(selectDoctorsTableFetching);
-  const appointments = useAppSelector(selectTableOneAppointment);
+  // const dispatch = useAppDispatch();
+  // const doctorsTable = useAppSelector(selectDoctorsTable);
+  // const isFetching = useAppSelector(selectDoctorsTableFetching);
+  // const appointments = useAppSelector(selectTableOneAppointment);
 
   const [selectedDate, setSelectedDate] = useState(dayjs());
-  useEffect(() => {
-    dispatch(fetchDoctors());
-  }, [dispatch]);
-
-  useEffect(() => {
-    const formattedDate = selectedDate.format("YYYY-MM-DD");
-    dispatch(fetchAppointmentOneDate(formattedDate));
-  }, [dispatch, selectedDate]);
+  // useEffect(() => {
+  //   dispatch(fetchDoctors());
+  // }, [dispatch]);
+  //
+  // useEffect(() => {
+  //   const formattedDate = selectedDate.format("YYYY-MM-DD");
+  //   dispatch(fetchAppointmentOneDate(formattedDate));
+  // }, [dispatch, selectedDate]);
 
   const handlePrevDay = () => {
     setSelectedDate((prev) => prev.subtract(1, "day"));
@@ -37,13 +38,20 @@ const DoctorTable = () => {
   const handleNextDay = () => {
     setSelectedDate((prev) => prev.add(1, "day"));
   };
-  const doctorsWithAppointments = doctorsTable.map((doc) => ({
+  // const doctorsWithAppointments = doctorsTable.map((doc) => ({
+  //   ...doc,
+  //   appointments: appointments.filter(
+  //     (appt) =>
+  //       appt.doctor &&
+  //       typeof appt.doctor === "object" &&
+  //       appt.doctor._id.toString() === doc._id.toString(),
+  //   ),
+  // }));
+
+  const doctorsWithAppointments = doctorsMock.map((doc) => ({
     ...doc,
-    appointments: appointments.filter(
-      (appt) =>
-        appt.doctor &&
-        typeof appt.doctor === "object" &&
-        appt.doctor._id.toString() === doc._id.toString(),
+    appointments: doc.appointments.filter(
+        (appt) => appt.date === selectedDate.format("YYYY-MM-DD")
     ),
   }));
   return (
@@ -88,13 +96,19 @@ const DoctorTable = () => {
           </div>
         </div>
         <div className="max-w-[calc(100vw-200px)] overflow-x-auto">
-          {isFetching && <p className="text-gray-500">Загрузка...</p>}
-          {!isFetching && doctorsTable.length === 0 && (
-            <p className="text-gray-500">Докторов пока нет</p>
+          {doctorsWithAppointments.length === 0 && (
+              <p className="text-gray-500">Докторов пока нет</p>
           )}
-          {!isFetching && doctorsTable.length > 0 && (
-            <DoctorTableItem doctors={doctorsWithAppointments} />
+          {doctorsWithAppointments.length > 0 && (
+              <DoctorTableItem doctors={doctorsWithAppointments} />
           )}
+          {/*{isFetching && <p className="text-gray-500">Загрузка...</p>}*/}
+          {/*{!isFetching && doctorsTable.length === 0 && (*/}
+          {/*  <p className="text-gray-500">Докторов пока нет</p>*/}
+          {/*)}*/}
+          {/*{!isFetching && doctorsTable.length > 0 && (*/}
+          {/*  <DoctorTableItem doctors={doctorsWithAppointments} />*/}
+          {/*)}*/}
         </div>
       </div>
     </>
